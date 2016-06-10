@@ -22,9 +22,8 @@ public class NCInterfaceFinder implements InterfaceFinder {
                 try {
                     if(file.getName().endsWith(".java")) {
                         String content = FileUtils.readFileToString(file);
-                        String validContent = StringUtils.removePattern(content, "\\<(.*?)\\>");
-                        if (validContent.contains("interface") && !validContent.contains("@interface")){
-                            String substring = validContent.substring(validContent.indexOf("interface") - 10, validContent.indexOf("interface") + 10); //some bullshit(protect from comment)
+                        if (content.contains("interface") && !content.contains("@interface")){
+                            String substring = content.substring(content.indexOf("interface") - 10, content.indexOf("interface") + 10); //some bullshit(protect from comment)
                             if(!substring.contains("//") && substring.contains("public")){
                                 return true;
                             }

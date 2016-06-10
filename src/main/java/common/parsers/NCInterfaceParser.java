@@ -18,7 +18,8 @@ public class NCInterfaceParser extends InterfaceParser {
         resultBlock = "";
         try {
             List<String> strings = FileUtils.readLines(file);
-            strings.forEach(string ->{
+            strings.forEach(str ->{
+                String string = StringUtils.removePattern(str, "\\<(.*?)\\>");
                 if(string.contains("interface") && string.contains("{")){
                     String head = StringUtils.substringBetween(string, "interface ", " {");
                     resultBlock += head + ": {" + "\n";
@@ -30,8 +31,7 @@ public class NCInterfaceParser extends InterfaceParser {
 
                     String arguments = StringUtils.substringBetween(string, "(", ")");
                     if(!arguments.isEmpty()){
-                        String validArg = StringUtils.removePattern(arguments, "\\<(.*?)\\>");
-                        String[] splitArgs = validArg.split(",");
+                        String[] splitArgs = arguments.split(",");
                         for (int i = 0; i < splitArgs.length; i++) {
                             String argName = StringUtils.substringAfterLast(splitArgs[i], " ");
                             resultBlock += argName + ((i == splitArgs.length -1) ? ") {}," + "\n" : ",");
