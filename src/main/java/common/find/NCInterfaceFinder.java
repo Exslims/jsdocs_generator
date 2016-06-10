@@ -5,10 +5,7 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import java.io.*;
-;
-import java.nio.file.Files;
 import java.util.Collection;
-import java.util.Scanner;
 
 /**
  * user: koku0316
@@ -24,9 +21,12 @@ public class NCInterfaceFinder implements InterfaceFinder {
                 try {
                     if(file.getName().endsWith(".java")) {
                         String content = FileUtils.readFileToString(file);
-
-                        if (content.contains("interface"))
-                            return true;
+                        if (content.contains("interface")){
+                            String substring = content.substring(content.indexOf("interface") - 10, content.indexOf("interface") + 10); //some bullshit(protect from comment)
+                            if(!substring.contains("//") && substring.contains("public")){
+                                return true;
+                            }
+                        }
                     }
 
                 } catch (IOException e) {
