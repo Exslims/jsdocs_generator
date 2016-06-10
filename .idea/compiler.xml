@@ -26,7 +26,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="jsdocs_generator" target="1.5" />
+      <module name="jsdocs_generator" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
