@@ -20,7 +20,7 @@ public class JSDocsBuilder {
     private InterfaceFinder finder = new NCInterfaceFinder();
     private InterfaceParser parser = new NCInterfaceParser();
 
-    private String resultString = "";
+    private String resultString = "(function () { " + "\n" + "window.uiplugins = {" + "\n";
 
     public void createJSDocsFrom(String path, String fileName) throws FileNotFoundException, UnsupportedEncodingException {
         Collection<File> files =finder.getInterfacesFrom(path);
@@ -28,6 +28,7 @@ public class JSDocsBuilder {
         files.forEach(file -> {
             resultString += parser.getJSDocsOf(file);
         });
+        resultString += "};" + "\n" + "});";
 
         PrintWriter writer = new PrintWriter(fileName,"UTF-8");
         writer.print(resultString);

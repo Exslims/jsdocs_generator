@@ -3,6 +3,7 @@ package common.find;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.util.Collection;
@@ -21,8 +22,9 @@ public class NCInterfaceFinder implements InterfaceFinder {
                 try {
                     if(file.getName().endsWith(".java")) {
                         String content = FileUtils.readFileToString(file);
-                        if (content.contains("interface")){
-                            String substring = content.substring(content.indexOf("interface") - 10, content.indexOf("interface") + 10); //some bullshit(protect from comment)
+                        String validContent = StringUtils.removePattern(content, "\\<(.*?)\\>");
+                        if (validContent.contains("interface") && !validContent.contains("@interface")){
+                            String substring = validContent.substring(validContent.indexOf("interface") - 10, validContent.indexOf("interface") + 10); //some bullshit(protect from comment)
                             if(!substring.contains("//") && substring.contains("public")){
                                 return true;
                             }
