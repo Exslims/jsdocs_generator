@@ -14,11 +14,14 @@ import java.util.*;
  */
 public class NCInterfaceParser extends InterfaceParser {
     private Map<String, String> prototypeMap = new HashMap<>();
+    private int interfaceCount = 0;
+    private int methodCount = 0;
     private String inheritance = "";
     private String resultBlock;
     @Override
     public String getJSDocsOf(File file) {
         resultBlock = "";
+        interfaceCount++;
         try {
             List<String> strings = FileUtils.readLines(file);
             strings.forEach(line ->{
@@ -32,11 +35,12 @@ public class NCInterfaceParser extends InterfaceParser {
                         resultBlock += getObjectName(validLine);
                 }
                 if(validLine.contains("(") && validLine.contains(")")){
+                    methodCount++;
                     String substringBefore = StringUtils.substringBefore(validLine, "(");
-                    String methodName = StringUtils.substringAfterLast(substringBefore, " ");
                     String arguments = StringUtils.substringBetween(validLine, "(", ")");
-                    resultBlock += getMethodDoc(methodName,arguments);
-                    resultBlock += methodName + ": function(";
+                    resultBlock += getMethodDoc(substringBefore,arguments);
+                    substringBefore = StringUtils.substringAfterLast(substringBefore, " ");
+                    resultBlock += substringBefore + ": function(";
                     if(!arguments.isEmpty()){
                         String[] splitArgs = arguments.split(",");
                         for (int i = 0; i < splitArgs.length; i++) {
@@ -63,6 +67,9 @@ public class NCInterfaceParser extends InterfaceParser {
         return name += ": {" + "\n";
     }
     private String getMethodDoc(String methodName, String argumentsString){
+        String returnObject = StringUtils.substringBeforeLast(methodName," ");
+        methodName = StringUtils.substringAfterLast(methodName, " ");
+
         String[] arguments = argumentsString.split(",");
         String comment = "/**" + "\n";
         String[] splitWords = methodName.split("(?=[A-Z])");
@@ -73,6 +80,11 @@ public class NCInterfaceParser extends InterfaceParser {
                 String argName = StringUtils.substringAfterLast(argument, " ");
                 comment += "* @param " + argName + "\n";
             }
+        }
+        if(!returnObject.contains("void")){
+            String linkStr = " {@link " + StringUtils.trim(returnObject) + "}";
+            returnObject = StringUtils.removeEnd(returnObject,"Api");
+            comment += "* @return " + StringUtils.trim(returnObject) + linkStr + "\n";
         }
         comment += "*/" + "\n";
         return comment;
@@ -93,8 +105,13 @@ public class NCInterfaceParser extends InterfaceParser {
     public String getInheritanceString(){
         prototypeMap.forEach((k,v) ->{
             String[] split = v.split(":");
-            inheritance += "window.uiplugins." + k + ".__proto__ = " + "window.uiplugins." + split[0] + ";\n";
+            inheritance += "window.uiplugins." + k + ".prototype = " + "window.uiplugins." + split[0] + ";\n";
         });
         return inheritance;
+    }
+    public String getStatisticString(){
+        return "/**" + "\n" +"Interfaces count = " + interfaceCount + "\n" +
+                "Methods count = " + methodCount + "\n"
+                + "This file is auto-generated" + "\n" + "*/";
     }
 }

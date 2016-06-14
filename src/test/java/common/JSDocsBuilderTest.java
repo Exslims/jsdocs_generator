@@ -17,6 +17,6 @@ public class JSDocsBuilderTest {
     }
     @Test
     public void createJSDocsFrom() throws Exception {
-        builder.createJSDocsFrom("C:\\Users\\Константин\\Desktop\\test\\src","test.js");
+        builder.createJSDocsFrom("C:\\svn_urls\\NCGEN_SVN\\UI_Plugins\\source\\com\\netcracker\\platform\\ui\\plugins\\gwt\\api","test.js");
     }
 }

@@ -22,7 +22,7 @@ public class NCInterfaceFinder implements InterfaceFinder {
                 try {
                     if(file.getName().endsWith(".java")) {
                         String content = FileUtils.readFileToString(file);
-                        if (content.contains("interface") && !content.contains("@interface")){
+                        if (content.contains("interface") && !content.contains("@interface") && !content.contains("@Deprecated")){
                             String substring = content.substring(content.indexOf("interface") - 10, content.indexOf("interface") + 10); //some bullshit(protect from comment)
                             if(!substring.contains("//") && substring.contains("public")){
                                 return true;

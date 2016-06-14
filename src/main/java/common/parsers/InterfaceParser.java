@@ -9,4 +9,5 @@ import java.io.File;
 public abstract class InterfaceParser {
     public abstract String getJSDocsOf(File file);
     public abstract String getInheritanceString();
+    public abstract String getStatisticString();
 }

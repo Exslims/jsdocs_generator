@@ -28,7 +28,7 @@ public class JSDocsBuilder {
         files.forEach(file -> {
             resultString += parser.getJSDocsOf(file);
         });
-        resultString += "};" + "\n" + parser.getInheritanceString() + "});";
+        resultString += "};" + "\n" + parser.getInheritanceString() + parser.getStatisticString() + "});";
 
         PrintWriter writer = new PrintWriter(fileName,"UTF-8");
         writer.print(resultString);
